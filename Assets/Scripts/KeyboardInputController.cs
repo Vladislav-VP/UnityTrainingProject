@@ -15,12 +15,15 @@ public class KeyboardInputController : MonoBehaviour
         while (true)
         {
             float timePassed = 0f;
+
             while (timePassed < workDuration)
             {
+                yield return null;
+
                 bool isSpacePressed = Input.GetKeyDown(KeyCode.Space);
-                if(!isSpacePressed && isFirstTime)
-                {
-                    yield return null;
+
+                if (!isSpacePressed && isFirstTime)
+                {                    
                     continue;
                 }
                 isFirstTime = false;
@@ -31,8 +34,6 @@ public class KeyboardInputController : MonoBehaviour
                 }
                 timePassed += Time.deltaTime;
                 Debug.Log($"Time passed: {timePassed}");
-
-                yield return null;
             }
             isFirstTime = true;
         }        
