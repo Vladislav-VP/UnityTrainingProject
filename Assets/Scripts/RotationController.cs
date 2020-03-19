@@ -1,9 +1,13 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RotationController : MonoBehaviour
 {
+    private const float maxRotationAngle = 90f;
+
+    private float xRotation;
+    private float yRotation;
+
     private void Start()
     {
         StartCoroutine(RotateObject());
@@ -12,16 +16,23 @@ public class RotationController : MonoBehaviour
     private IEnumerator RotateObject()
     {
         Quaternion startRotation = transform.rotation;
-        var xAxis = new Vector3(1, 0, 0);
-        var yAxis = new Vector3(0, 1, 0);
 
-        transform.Rotate(xAxis, 90);
-        yield return new WaitForSeconds(5);
-        transform.Rotate(yAxis, 90);
+        while (xRotation < maxRotationAngle)
+        {
+            xRotation += Time.deltaTime * 10;
+            transform.rotation = Quaternion.Euler(xRotation, 0, 0);
+            yield return null;
+        }
+
+        while (yRotation < maxRotationAngle)
+        {
+            yRotation += Time.deltaTime * 10;
+            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            yield return null;
+        }
 
         Quaternion finalFotation = transform.rotation;
-
         float rotationAngle = Quaternion.Angle(startRotation, finalFotation);
-        Debug.Log(rotationAngle);
-    }    
+        Debug.Log($"Total rotation angle: {rotationAngle}");
+    }
 }
