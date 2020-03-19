@@ -3,39 +3,29 @@ using UnityEngine;
 
 public class KeyboardInputController : MonoBehaviour
 {
-    private bool isFirstTime = true;
+    private float lastTimePressed = -float.MaxValue;
+    private float duration = 10f;
 
     private void Start()
     {
-        StartCoroutine(WorkForSeconds(10));
+        StartCoroutine(Test());
     }
 
-    private IEnumerator WorkForSeconds(float workDuration)
+    private IEnumerator Test()
     {
         while (true)
         {
-            float timePassed = 0f;
-
-            while (timePassed < workDuration)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                yield return null;
-
-                bool isSpacePressed = Input.GetKeyDown(KeyCode.Space);
-
-                if (!isSpacePressed && isFirstTime)
-                {                    
-                    continue;
-                }
-                isFirstTime = false;
-
-                if (isSpacePressed)
-                {
-                    timePassed = 0f;
-                }
-                timePassed += Time.deltaTime;
-                Debug.Log($"Time passed: {timePassed}");
+                lastTimePressed = Time.time;
             }
-            isFirstTime = true;
-        }        
+
+            if (Time.time < lastTimePressed + duration)
+            {
+                Debug.Log(duration - (Time.time - lastTimePressed));
+            }
+
+            yield return null;
+        }
     }
 }
