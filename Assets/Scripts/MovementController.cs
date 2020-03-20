@@ -1,24 +1,20 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    private Vector3 startPosition = Vector3.zero;
-    private Vector3 nextPosition = Vector3.zero;
+    [SerializeField]
+    private Vector3 direction;
 
-    private void Start()
+    private Vector3 startPosition;
+
+    private void Awake()
     {
-        StartCoroutine(DrawRay());
+        startPosition = transform.position;
     }
-    private IEnumerator DrawRay()
+
+    private void Update()
     {
-        float duration = 5f;
-        while (nextPosition.x < 1f && nextPosition.z < 1f)
-        {
-            nextPosition.x += Time.deltaTime*0.1f;
-            nextPosition.z += Time.deltaTime*0.1f;
-            Debug.DrawRay(startPosition, nextPosition, Color.white, duration);
-            yield return null;
-        }
+        transform.Translate(direction * Time.deltaTime, Space.Self);
+        Debug.DrawRay(startPosition, transform.position);
     }
 }
